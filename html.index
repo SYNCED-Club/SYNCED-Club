@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SYNCED Club | Official Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --neon-cyan: #00f3ff;
+            --neon-purple: #bc13fe;
+            --neon-pink: #ff00ff;
+            --neon-lime: #39ff14;
+            --neon-orange: #ff4500;
+            --dark-bg: #020202;
+        }
+
+        body, html {
+            margin: 0; padding: 0;
+            height: 100%; width: 100%;
+            font-family: 'Rajdhani', sans-serif;
+            background-color: var(--dark-bg);
+            color: white; overflow-x: hidden;
+        }
+
+        /* NAVIGATION & SIDE MENU */
+        nav {
+            position: fixed; top: 0; width: 100%; height: 60px;
+            display: flex; justify-content: space-between; align-items: center;
+            background: rgba(0,0,0,0.95); backdrop-filter: blur(15px);
+            border-bottom: 2px solid var(--neon-cyan); z-index: 1000;
+        }
+        .menu-icon { font-size: 30px; margin-left: 15px; cursor: pointer; color: var(--neon-cyan); }
+        .site-title { font-size: 1.3rem; font-weight: 800; letter-spacing: 4px; }
+        #ist-clock { margin-right: 15px; color: var(--neon-cyan); font-weight: bold; font-size: 0.9rem; }
+
+        .side-menu {
+            position: fixed; left: -300px; top: 60px; height: 100vh;
+            width: 260px; background: rgba(0,0,0,0.98);
+            display: flex; flex-direction: column; gap: 12px; padding: 25px;
+            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
+            z-index: 999; border-right: 2px solid var(--neon-purple);
+        }
+        .side-menu.open { left: 0; }
+        .menu-btn {
+            background: rgba(255,255,255,0.05); border: 1px solid var(--neon-cyan);
+            color: white; padding: 15px; border-radius: 5px;
+            cursor: pointer; text-align: left; font-weight: 600; text-transform: uppercase;
+        }
+
+        /* CENTERED ULTRA-BRIGHT LASERS */
+        .home-section {
+            position: relative; height: 100vh;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            overflow: hidden; background: #000;
+        }
+        .laser-container {
+            position: absolute; top: 50%; left: 50%; width: 2px; height: 2px;
+            pointer-events: none; z-index: 1;
+        }
+        .laser-beam {
+            position: absolute; height: 3px; width: 100vw;
+            background: linear-gradient(90deg, #fff, var(--color), transparent);
+            filter: drop-shadow(0 0 15px var(--color)) contrast(150%);
+            opacity: 1;
+            transform-origin: left center;
+            animation: shoot-laser 1.5s ease-out forwards;
+        }
+
+        @keyframes shoot-laser {
+            0% { width: 0; opacity: 1; transform: rotate(var(--deg)); }
+            100% { width: 200vw; opacity: 0; transform: rotate(var(--deg)); }
+        }
+
+        /* HERO CONTENT */
+        .hero-container {
+            position: relative; z-index: 10;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(15px);
+            padding: 40px; border-radius: 25px;
+            border: 2px solid var(--neon-cyan);
+            text-align: center; box-shadow: 0 0 50px rgba(0, 243, 255, 0.3);
+        }
+        .hero-title {
+            font-size: clamp(2.5rem, 10vw, 5rem); margin: 0;
+            text-shadow: 0 0 20px var(--neon-purple), 0 0 40px var(--neon-cyan);
+        }
+
+        /* PAGE SECTIONS */
+        .page-section { min-height: 100vh; display: none; padding: 100px 20px 40px; text-align: center; flex-direction: column; align-items: center; }
+        .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 20px; width: 100%; max-width: 900px; margin-top: 30px; }
+        .pass-card { background: rgba(255,255,255,0.05); border: 2px solid var(--neon-cyan); padding: 25px; border-radius: 15px; font-weight: bold; }
+        .robux-price { display: block; margin-top: 10px; color: var(--neon-lime); font-size: 1.2rem; }
+
+        /* GALLERY & LIGHTBOX */
+        .gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; width: 100%; max-width: 900px; }
+        .gallery-grid img { width: 100%; aspect-ratio: 16/9; object-fit: cover; border-radius: 8px; border: 2px solid var(--neon-cyan); cursor: pointer; transition: 0.3s; }
+        #lightbox { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); display: none; justify-content: center; align-items: center; z-index: 2000; }
+        #lightbox img { max-width: 90%; max-height: 85%; border: 2px solid white; border-radius: 10px; }
+        #lightbox-close { position: absolute; top: 20px; right: 30px; font-size: 50px; cursor: pointer; color: white; }
+
+        .play-btn {
+            display: inline-block; margin-top: 20px; padding: 12px 30px;
+            background: transparent; border: 2px solid var(--neon-lime);
+            color: var(--neon-lime); text-decoration: none; border-radius: 50px;
+            font-weight: bold; text-transform: uppercase; transition: 0.3s;
+        }
+        .play-btn:hover { background: var(--neon-lime); color: black; box-shadow: 0 0 20px var(--neon-lime); }
+
+        @media (max-width: 600px) { .gallery-grid { grid-template-columns: repeat(2, 1fr); } }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="menu-icon" onclick="toggleMenu()">☰</div>
+        <div class="site-title">SYNCED</div>
+        <div id="ist-clock">IND: 00:00:00</div>
+    </nav>
+
+    <div class="side-menu" id="sideMenu">
+        <button class="menu-btn" onclick="showSection('home')">Home</button>
+        <button class="menu-btn" onclick="showSection('experience')">Experience</button>
+        <button class="menu-btn" onclick="showSection('gamepass')">Gamepass</button>
+        <button class="menu-btn" onclick="showSection('gallery')">Gallery</button>
+        <hr style="border: 0.5px solid var(--neon-purple); width: 100%; opacity: 0.3;">
+        <a href="https://www.roblox.com/share?code=f57dccfe75e57d40b7c1b9d6cd9f236d&type=ExperienceDetails&stamp=1776111757669" class="menu-btn" style="text-decoration:none; color:var(--neon-lime); border-color:var(--neon-lime); text-align:center;">Launch Club</a>
+    </div>
+
+    <section id="home-section" class="home-section" style="display: flex;">
+        <div class="laser-container" id="laserBox"></div>
+        <div class="hero-container">
+            <h1 class="hero-title">SYNCED CLUB</h1>
+            <p style="color: var(--neon-cyan); font-weight: bold; margin-top: 15px; letter-spacing: 2px;">WHERE WE SYNC, YOU FEEL THE MUSIC</p>
+        </div>
+    </section>
+
+    <section id="experience-section" class="page-section">
+        <div class="hero-container">
+            <h2 style="color: var(--neon-cyan);">THE EXPERIENCE</h2>
+            <p>Welcome to SYNCED Club! 🎧</p>
+            <p>High-quality synced songs & neon reflections.</p>
+            <a href="https://www.roblox.com/share?code=f57dccfe75e57d40b7c1b9d6cd9f236d&type=ExperienceDetails&stamp=1776111757669" class="play-btn">Play Now</a>
+        </div>
+    </section>
+
+    <section id="gamepass-section" class="page-section">
+        <h1 style="color: var(--neon-purple);">GAMEPASS STORE</h1>
+        <div class="grid-container">
+            <div class="pass-card">VIP ACCESS<span class="robux-price">1 Robux</span></div>
+            <div class="pass-card">VVIP PRIVILEGE<span class="robux-price">149 Robux</span></div>
+            <div class="pass-card">HD COMMANDS<span class="robux-price">75 Robux</span></div>
+            <div class="pass-card">GUN PACK<span class="robux-price">25 Robux</span></div>
+            <div class="pass-card">GLOW STICKS<span class="robux-price">85 Robux</span></div>
+        </div>
+    </section>
+
+    <section id="gallery-section" class="page-section">
+        <h1>CLUB GALLERY</h1>
+        <div class="gallery-grid">
+            <img src="image1.jpg" onclick="openLightbox(this.src)">
+            <img src="image2.jpg" onclick="openLightbox(this.src)">
+            <img src="image3.jpg" onclick="openLightbox(this.src)">
+            <img src="image4.jpg" onclick="openLightbox(this.src)">
+            <img src="image5.jpg" onclick="openLightbox(this.src)">
+            <img src="image6.jpg" onclick="openLightbox(this.src)">
+            <img src="image7.jpg" onclick="openLightbox(this.src)">
+            <img src="image8.jpg" onclick="openLightbox(this.src)">
+            <img src="image9.jpg" onclick="openLightbox(this.src)">
+        </div>
+    </section>
+
+    <div id="lightbox" onclick="closeLightbox()"><span id="lightbox-close">&times;</span><img id="lightbox-img"></div>
+
+    <script>
+        function toggleMenu() { document.getElementById('sideMenu').classList.toggle('open'); }
+        function showSection(id) {
+            document.querySelectorAll('section').forEach(s => s.style.display = 'none');
+            document.getElementById(id + '-section').style.display = 'flex';
+            toggleMenu();
+        }
+
+        const colors = ['#00f3ff', '#bc13fe', '#ff00ff', '#39ff14', '#ff4500'];
+        const laserBox = document.getElementById('laserBox');
+
+        function spawnLaser() {
+            const beam = document.createElement('div');
+            beam.className = 'laser-beam';
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            const deg = Math.floor(Math.random() * 360);
+            beam.style.setProperty('--color', color);
+            beam.style.setProperty('--deg', deg + 'deg');
+            laserBox.appendChild(beam);
+            setTimeout(() => beam.remove(), 1500);
+        }
+        setInterval(spawnLaser, 120);
+
+        function openLightbox(src) { document.getElementById('lightbox-img').src = src; document.getElementById('lightbox').style.display = 'flex'; }
+        function closeLightbox() { document.getElementById('lightbox').style.display = 'none'; }
+
+        function updateClock() {
+            const now = new Date();
+            const istTime = now.toLocaleTimeString('en-GB', { timeZone: 'Asia/Kolkata', hour12: false });
+            document.getElementById('ist-clock').innerHTML = "IND: " + istTime;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+    </script>
+</body>
+</html>
